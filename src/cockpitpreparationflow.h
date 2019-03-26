@@ -15,6 +15,8 @@ public:
 	virtual bool completed() const;
 
 private:
+    float nextState();
+
     FlowState m_flowState;
 };
 
