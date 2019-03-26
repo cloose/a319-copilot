@@ -12,7 +12,6 @@ MainWindow::MainWindow(const std::string& title)
 
 MainWindow::~MainWindow()
 {
-    delete m_startFlightButton;
 }
 
 ButtonClickedEvent* MainWindow::flightStartedEvent() const

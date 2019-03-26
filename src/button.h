@@ -1,6 +1,7 @@
 #ifndef _BUTTON_H_
 #define _BUTTON_H_
 
+#include <memory>
 #include <string>
 
 typedef int XPLMMouseStatus;
@@ -29,7 +30,7 @@ private:
 
     std::string m_text;
     Button::Rectangle m_position;
-    ButtonClickedEvent* m_buttonClickedEvent;
+    std::unique_ptr<ButtonClickedEvent> m_buttonClickedEvent;
 };
 
 #endif // _BUTTON_H_

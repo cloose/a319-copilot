@@ -15,12 +15,11 @@ Button::Button(const std::string& text)
 
 Button::~Button()
 {
-    delete m_buttonClickedEvent;
 }
 
 ButtonClickedEvent* Button::buttonClickedEvent() const
 {
-    return m_buttonClickedEvent;
+    return m_buttonClickedEvent.get();
 }
 
 void Button::draw(int windowLeft, int windowTop, int windowRight, int windowBottom)

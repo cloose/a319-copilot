@@ -1,6 +1,7 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
+#include <memory>
 #include "window.h"
 
 class Button;
@@ -19,7 +20,7 @@ protected:
     virtual int onMouseClicked(int x, int y, XPLMMouseStatus status);
 
 private:
-    Button* m_startFlightButton;
+    std::unique_ptr<Button> m_startFlightButton;
 };
 
 #endif // _MAINWINDOW_H_
