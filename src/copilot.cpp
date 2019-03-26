@@ -37,7 +37,12 @@ void Copilot::startFlight()
 float Copilot::update(float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop, int counter)
 {
 	Log() << "[COPILOT] flight loop callback" << Log::endl;
-	return m_flow->update();
+	try {
+		return m_flow->update();
+	} catch(std::runtime_error& ex) {
+        Log() << "exception during flow update: " << ex.what() << Log::endl;
+		return 0.0f;
+    }
 }
 
 void Copilot::nextState()
