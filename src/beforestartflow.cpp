@@ -98,3 +98,8 @@ bool BeforeStartFlow::completed() const
 {
     return m_flowState == FlowState::Completed;
 }
+
+float BeforeStartFlow::nextState()
+{
+    return 0.0f;
+}

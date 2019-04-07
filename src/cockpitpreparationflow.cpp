@@ -65,8 +65,7 @@ float CockpitPreparationFlow::update()
         efisBrightnessTop = 270.0f;
         Log() << "[COPILOT] current brightness of efis top panel: " << std::to_string(efisBrightnessTop) << Log::endl;
 
-        m_flowState = FlowState::EfisBrightnessBottom;
-        return 1.0f;
+        return nextState();
     }
 
     if (m_flowState == FlowState::EfisBrightnessBottom)
@@ -75,8 +74,7 @@ float CockpitPreparationFlow::update()
         efisBrightnessBottom = 270.0f;
         Log() << "[COPILOT] current brightness of efis bottom panel: " << std::to_string(efisBrightnessBottom) << Log::endl;
 
-        m_flowState = FlowState::ParkingBrake;
-        return 1.0f;
+        return nextState();
     }
 
     if (m_flowState == FlowState::ParkingBrake)
@@ -180,6 +178,21 @@ float CockpitPreparationFlow::nextState()
 
    	switch (m_flowState)
 	{
+        case FlowState::EfisBrightnessTop:
+            m_flowState = FlowState::EfisBrightnessBottom;
+            loopWait =  1.0f;
+            break;
+
+        case FlowState::EfisBrightnessBottom:
+            m_flowState = FlowState::ParkingBrake;
+            loopWait =  1.0f;
+            break;
+
+        case FlowState::ParkingBrake:
+            m_flowState = FlowState::Flaps;
+            loopWait =  1.0f;
+            break;
+
         case FlowState::EngineMasterSwitches:
             m_flowState = FlowState::EngineModeSelector;
             loopWait =  1.0f;
