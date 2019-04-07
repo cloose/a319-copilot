@@ -6,6 +6,7 @@
 
 class Button;
 class ButtonClickedEvent;
+class Label;
 
 class MainWindow : public Window
 {
@@ -20,6 +21,7 @@ protected:
     virtual int onMouseClicked(int x, int y, XPLMMouseStatus status);
 
 private:
+    std::unique_ptr<Label> m_title;
     std::unique_ptr<Button> m_startFlightButton;
 };
 

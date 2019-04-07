@@ -3,9 +3,11 @@
 #include <XPLMGraphics.h>
 
 #include "button.h"
+#include "label.h"
 
 MainWindow::MainWindow(const std::string& title)
     : Window(title)
+	, m_title(new Label("A319 Copilot"))
     , m_startFlightButton(new Button("Start Flight"))
 {
 }
@@ -36,6 +38,7 @@ void MainWindow::onDrawWindow()
 	int l, t, r, b;
 	XPLMGetWindowGeometry(m_window, &l, &t, &r, &b);
 
+	m_title->draw(l, t, r, b);
 	m_startFlightButton->draw(l, t, r, b);
 }
 
