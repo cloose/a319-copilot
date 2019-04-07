@@ -16,6 +16,7 @@ set(SRC utils/cominstancecreationfailed.cpp
         copilot.cpp
         dataref.cpp
         flightloopprocessor.cpp
+        label.cpp
         mainwindow.cpp
         speechsynthesizer.cpp
         window.cpp
