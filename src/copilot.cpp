@@ -2,12 +2,12 @@
 
 #include <XPLMUtilities.h>
 
-#include "beforestartflow.h"
-#include "cockpitpreparationflow.h"
+#include <log.h>
+#include "flows/beforestartflow.h"
+#include "flows/cockpitpreparationflow.h"
+#include "flows/flow.h"
 #include "flightloopprocessor.h"
-#include "flow.h"
 #include "speechsynthesizer.h"
-#include "utils/log.h"
 
 enum class FlightState {
 	CockpitPreparation,

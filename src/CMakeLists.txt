@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(a319-copilot)
 
-include_directories(${OPENGL_INCLUDE_DIR} "../SDK/CHeaders/XPLM")
+include_directories(${OPENGL_INCLUDE_DIR} "../SDK/CHeaders/XPLM" "./utils")
 
 find_library(XPLM_LIBRARY XPLM_64 ../SDK/Libraries/Win/)
 set(STATIC_LIBRARY_LINKER_FLAGS "-static-libgcc -static-libstdc++")
@@ -11,9 +11,9 @@ set(SRC utils/cominstancecreationfailed.cpp
         utils/dataref.cpp
         utils/log.cpp
         utils/logwriter.cpp
-        beforestartflow.cpp
+        flows/beforestartflow.cpp
+        flows/cockpitpreparationflow.cpp
         button.cpp
-        cockpitpreparationflow.cpp
         copilot.cpp
         flightloopprocessor.cpp
         label.cpp
@@ -29,13 +29,13 @@ set(HDR utils/comhelper.h
         utils/log.h
         utils/logentry.h
         utils/logwriter.h
-        beforestartflow.h
+        flows/beforestartflow.h
+        flows/cockpitpreparationflow.h
+        flows/flow.h
         button.h
         buttonclickedevent.h
-        cockpitpreparationflow.h
         copilot.h
         flightloopprocessor.h
-        flow.h
         label.h
         mainwindow.h
         speechsynthesizer.h

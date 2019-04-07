@@ -2,9 +2,9 @@
 
 #include <XPLMUtilities.h>
 
-#include "utils/log.h"
-#include "utils/command.h"
-#include "utils/dataref.h"
+#include <log.h>
+#include <command.h>
+#include <dataref.h>
 
 enum class FlowState {
     ParkingBrake,
