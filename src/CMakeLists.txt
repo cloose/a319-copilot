@@ -9,6 +9,7 @@ set(STATIC_LIBRARY_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 set(SRC utils/cominstancecreationfailed.cpp
         utils/command.cpp
         utils/dataref.cpp
+        utils/flightloopprocessor.cpp
         utils/log.cpp
         utils/logwriter.cpp
         flows/beforestartflow.cpp
@@ -16,7 +17,6 @@ set(SRC utils/cominstancecreationfailed.cpp
         ui/button.cpp
         ui/label.cpp
         copilot.cpp
-        flightloopprocessor.cpp
         mainwindow.cpp
         speechsynthesizer.cpp
         window.cpp
@@ -26,6 +26,7 @@ set(HDR utils/comhelper.h
         utils/cominstancecreationfailed.h
         utils/command.h
         utils/dataref.h
+        utils/flightloopprocessor.h
         utils/log.h
         utils/logentry.h
         utils/logwriter.h
@@ -36,7 +37,6 @@ set(HDR utils/comhelper.h
         ui/buttonclickedevent.h
         ui/label.h
         copilot.h
-        flightloopprocessor.h
         mainwindow.h
         speechsynthesizer.h
         window.h)

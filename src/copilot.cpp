@@ -3,10 +3,10 @@
 #include <XPLMUtilities.h>
 
 #include <log.h>
+#include <flightloopprocessor.h>
 #include "flows/beforestartflow.h"
 #include "flows/cockpitpreparationflow.h"
 #include "flows/flow.h"
-#include "flightloopprocessor.h"
 #include "speechsynthesizer.h"
 
 enum class FlightState {
