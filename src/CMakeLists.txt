@@ -22,7 +22,26 @@ set(SRC utils/cominstancecreationfailed.cpp
         window.cpp
         xplane.cpp)
 
+set(HDR utils/comhelper.h
+        utils/cominstancecreationfailed.h
+        utils/command.h
+        utils/dataref.h
+        utils/log.h
+        utils/logentry.h
+        utils/logwriter.h
+        beforestartflow.h
+        button.h
+        buttonclickedevent.h
+        cockpitpreparationflow.h
+        copilot.h
+        flightloopprocessor.h
+        flow.h
+        label.h
+        mainwindow.h
+        speechsynthesizer.h
+        window.h)
+
 add_compile_definitions(IBM XPLM200 XPLM210 XPLM300 XPLM301)
-add_library(a319-copilot SHARED ${SRC})
+add_library(a319-copilot SHARED ${SRC} ${HDR})
 
 target_link_libraries(a319-copilot sapi ${OPENGL_LIBRARIES} ${XPLM_LIBRARY} ${STATIC_LIBRARY_LINKER_FLAGS})
