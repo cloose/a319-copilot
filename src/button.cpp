@@ -24,16 +24,20 @@ ButtonClickedEvent* Button::buttonClickedEvent() const
 
 void Button::draw(int windowLeft, int windowTop, int windowRight, int windowBottom)
 {
-    float col_white[] = {1.0, 1.0, 1.0};
-    float col_blue[] = {0.35, 0.35, 1.0, 1.0};
+    static float col_white[] = {1.0, 1.0, 1.0};
+    static float col_blue[] = {0.35, 0.35, 1.0, 1.0};
 
     int char_height;
     XPLMGetFontDimensions(xplmFont_Proportional, NULL, &char_height, NULL);
+    int textWidth = XPLMMeasureString(xplmFont_Proportional, m_text.c_str(), m_text.length());
 
-    m_position.left = windowLeft + 10;
-    m_position.top = windowTop - 15;
-    m_position.right = m_position.left + XPLMMeasureString(xplmFont_Proportional, m_text.c_str(), m_text.length()) + 50;
-    m_position.bottom = m_position.top - char_height - 30;
+    int buttonWidth = textWidth + 40;
+    int buttonHeight = char_height + 20;
+
+    m_position.left = windowLeft + (windowRight - windowLeft - buttonWidth) / 2;
+    m_position.top = windowTop - (windowTop - windowBottom - buttonHeight) / 2;
+    m_position.right = m_position.left + buttonWidth;
+    m_position.bottom = m_position.top - buttonHeight;
 
     glColor4fv(col_blue);
     glBegin(GL_QUADS);
@@ -45,7 +49,7 @@ void Button::draw(int windowLeft, int windowTop, int windowRight, int windowBott
     }
     glEnd();
 
-    XPLMDrawString(col_white, m_position.left + 25, m_position.bottom + 15, (char*)m_text.c_str(), NULL, xplmFont_Proportional);
+    XPLMDrawString(col_white, m_position.left + 20, m_position.bottom + 10, (char*)m_text.c_str(), NULL, xplmFont_Proportional);
 }
 
 bool Button::handleMouseClick(int x, int y, XPLMMouseStatus mouseStatus)
