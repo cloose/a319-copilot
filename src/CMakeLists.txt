@@ -7,14 +7,14 @@ find_library(XPLM_LIBRARY XPLM_64 ../SDK/Libraries/Win/)
 set(STATIC_LIBRARY_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 set(SRC utils/cominstancecreationfailed.cpp
+        utils/command.cpp
+        utils/dataref.cpp
         utils/log.cpp
         utils/logwriter.cpp
         beforestartflow.cpp
         button.cpp
         cockpitpreparationflow.cpp
-        command.cpp
         copilot.cpp
-        dataref.cpp
         flightloopprocessor.cpp
         label.cpp
         mainwindow.cpp
