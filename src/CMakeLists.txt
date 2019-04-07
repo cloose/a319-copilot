@@ -13,10 +13,10 @@ set(SRC utils/cominstancecreationfailed.cpp
         utils/logwriter.cpp
         flows/beforestartflow.cpp
         flows/cockpitpreparationflow.cpp
-        button.cpp
+        ui/button.cpp
+        ui/label.cpp
         copilot.cpp
         flightloopprocessor.cpp
-        label.cpp
         mainwindow.cpp
         speechsynthesizer.cpp
         window.cpp
@@ -32,11 +32,11 @@ set(HDR utils/comhelper.h
         flows/beforestartflow.h
         flows/cockpitpreparationflow.h
         flows/flow.h
-        button.h
-        buttonclickedevent.h
+        ui/button.h
+        ui/buttonclickedevent.h
+        ui/label.h
         copilot.h
         flightloopprocessor.h
-        label.h
         mainwindow.h
         speechsynthesizer.h
         window.h)

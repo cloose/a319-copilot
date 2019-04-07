@@ -4,8 +4,6 @@
 #include <XPLMDisplay.h>
 #include <XPLMGraphics.h>
 
-#include "utils/log.h"
-
 Label::Label(const std::string& text)
     : m_text(text)
 {

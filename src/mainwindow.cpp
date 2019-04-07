@@ -2,8 +2,8 @@
 
 #include <XPLMGraphics.h>
 
-#include "button.h"
-#include "label.h"
+#include "ui/button.h"
+#include "ui/label.h"
 
 MainWindow::MainWindow(const std::string& title)
     : Window(title)

@@ -13,12 +13,11 @@
 	#include <GL/gl.h>
 #endif
 
-//#include "button.h"
-#include "buttonclickedevent.h"
+#include <logwriter.h>
+#include "ui/buttonclickedevent.h"
 #include "mainwindow.h"
 #include "copilot.h"
 #include "flightloopprocessor.h"
-#include "utils/logwriter.h"
 
 #ifndef XPLM301
 	#error This is made to be compiled against the XPLM301 SDK
