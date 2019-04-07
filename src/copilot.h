@@ -18,6 +18,8 @@ public:
 
     float update(float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop, int counter);
 
+    std::string flightStateDescription() const;
+    
 private:
     void nextState();
     

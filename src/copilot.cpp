@@ -45,6 +45,21 @@ float Copilot::update(float elapsedSinceLastCall, float elapsedTimeSinceLastFlig
     }
 }
 
+std::string Copilot::flightStateDescription() const
+{
+	switch (m_flightState)
+	{
+		case FlightState::CockpitPreparation:
+			return "Cockpit Preparation Flow";
+
+		case FlightState::BeforeStart:
+			return "Before Start Flow";
+	
+		default:
+			return "";
+	}
+}
+
 void Copilot::nextState()
 {
 	switch (m_flightState)
