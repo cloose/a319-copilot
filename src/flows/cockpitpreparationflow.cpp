@@ -172,6 +172,23 @@ bool CockpitPreparationFlow::completed() const
     return m_flowState == FlowState::Completed;
 }
 
+std::vector<std::string> CockpitPreparationFlow::pilotFlyingFlowSteps() const
+{
+    return { 
+        "PFD/ND.................BRT",
+        "FLOOD LT...........AS RQRD",
+        "INTEG LT...........AS RQRD",
+        "BATTERY 1+2.............ON",
+        "EXT POWER...............ON",
+        "RCDR GND CTL............ON",
+        "ADIRS..................NAV",
+        "ELEC HYD PUMP...........ON",
+        "FUEL PUMPS..............ON",
+        "ENG GEN...........ON/FAULT",
+        "PACK 1+2................ON"
+    };
+}
+
 float CockpitPreparationFlow::nextState()
 {
     float loopWait = 0.0f;

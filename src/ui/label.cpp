@@ -13,6 +13,11 @@ Label::~Label()
 {
 }
 
+void Label::setText(const std::string& text)
+{
+    m_text = text;
+}
+
 void Label::draw(int windowLeft, int windowTop, int windowRight, int windowBottom)
 {
     static float col_white[] = {1.0, 1.0, 1.0};

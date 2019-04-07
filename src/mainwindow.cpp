@@ -2,13 +2,11 @@
 
 #include <XPLMGraphics.h>
 
-#include "ui/button.h"
-#include "ui/label.h"
+#include "page.h"
 
 MainWindow::MainWindow(const std::string& title)
     : Window(title)
-	, m_title(new Label("A319 Copilot"))
-    , m_startFlightButton(new Button("Start Flight"))
+	, m_page(nullptr)
 {
 }
 
@@ -16,9 +14,9 @@ MainWindow::~MainWindow()
 {
 }
 
-ButtonClickedEvent* MainWindow::flightStartedEvent() const
+void MainWindow::showPage(std::shared_ptr<Page> page)
 {
-    return m_startFlightButton->buttonClickedEvent();
+	m_page = page;
 }
 
 void MainWindow::onDrawWindow()
@@ -38,12 +36,10 @@ void MainWindow::onDrawWindow()
 	int l, t, r, b;
 	XPLMGetWindowGeometry(m_window, &l, &t, &r, &b);
 
-	m_title->draw(l, t, r, b);
-	m_startFlightButton->draw(l, t, r, b);
+	m_page->draw(l, t, r, b);
 }
 
 int MainWindow::onMouseClicked(int x, int y, XPLMMouseStatus status)
 {
-    bool handled = m_startFlightButton->handleMouseClick(x, y, status);
-	return handled ? 1 : 0;
+	return m_page->onMouseClicked(x, y, status);
 }

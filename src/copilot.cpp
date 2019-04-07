@@ -7,20 +7,15 @@
 #include "flows/beforestartflow.h"
 #include "flows/cockpitpreparationflow.h"
 #include "flows/flow.h"
+#include "flightstate.h"
 #include "speechsynthesizer.h"
 
-enum class FlightState {
-	CockpitPreparation,
-	BeforeStart,
-	EngineStart,
-	AfterStart
-};
-
 Copilot::Copilot()
-	: m_flightState(FlightState::CockpitPreparation)
+	: m_flightState(FlightState::StartFlight)
 	, m_flightLoopProcessor(new FlightLoopProcessor(0.0, [this](float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop, int counter) -> float { return this->update(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop, counter); }))
     , m_flow(nullptr)
 	, m_speechSynthesizer(new SpeechSynthesizer())
+	, m_flightStateChangedEvent(new FlightStateChangedEvent())
 {
 }
 
@@ -45,6 +40,11 @@ float Copilot::update(float elapsedSinceLastCall, float elapsedTimeSinceLastFlig
     }
 }
 
+FlightStateChangedEvent* Copilot::flightStateChangedEvent() const
+{
+	return m_flightStateChangedEvent.get();
+}
+
 std::string Copilot::flightStateDescription() const
 {
 	switch (m_flightState)
@@ -60,25 +60,33 @@ std::string Copilot::flightStateDescription() const
 	}
 }
 
+std::vector<std::string> Copilot::pilotFlyingFlowSteps() const
+{
+	return m_flow->pilotFlyingFlowSteps();
+}
+
 void Copilot::nextState()
 {
 	switch (m_flightState)
 	{
-		case FlightState::CockpitPreparation:
+		case FlightState::StartFlight:
 			m_speechSynthesizer->speak(L"cockpit preparation flow");
 			m_flow.reset(new CockpitPreparationFlow());
-			m_flightState = FlightState::BeforeStart;
+			m_flightState = FlightState::CockpitPreparation;
 			break;
-	
-		case FlightState::BeforeStart:
+
+		case FlightState::CockpitPreparation:
 			m_speechSynthesizer->speak(L"before start flow");
 			m_flow.reset(new BeforeStartFlow());
-			m_flightState = FlightState::EngineStart;
+			m_flightState = FlightState::BeforeStart;
 			break;
 
 		default:
 			break;
 	}
+
+	Log() << "emit m_flightStateChangedEvent" << Log::endl;
+	m_flightStateChangedEvent->emit(m_flightState);
 
 	// run flight loop on next cycle
 	m_flightLoopProcessor->setCallbackInterval(-1.0);

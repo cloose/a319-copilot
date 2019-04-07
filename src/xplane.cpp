@@ -13,11 +13,15 @@
 	#include <GL/gl.h>
 #endif
 
+#include <log.h>
 #include <logwriter.h>
+#include <flightloopprocessor.h>
 #include "ui/buttonclickedevent.h"
+#include "flightstate.h"
+#include "flowpage.h"
 #include "mainwindow.h"
 #include "copilot.h"
-#include "flightloopprocessor.h"
+#include "welcomepage.h"
 
 #ifndef XPLM301
 	#error This is made to be compiled against the XPLM301 SDK
@@ -35,6 +39,20 @@ int					dummy_mouse_handler(XPLMWindowID in_window_id, int x, int y, int is_down
 XPLMCursorStatus	handle_cursor_status(XPLMWindowID in_window_id, int x, int y, void * in_refcon);
 int					dummy_wheel_handler(XPLMWindowID in_window_id, int x, int y, int wheel, int clicks, void * in_refcon) { return 0; }
 void				dummy_key_handler(XPLMWindowID in_window_id, char key, XPLMKeyFlags flags, char virtual_key, void * in_refcon, int losing_focus) { }
+
+void onFlightStarted()
+{
+	auto flowPage = std::make_shared<FlowPage>();
+
+	Log() << "connect flightStateChangedEvent" << Log::endl;
+	copilot->flightStateChangedEvent()->connect([flowPage](FlightState newFlightState) {
+		Log() << "flight state changed -> update title: " << copilot->flightStateDescription() << Log::endl;
+		flowPage->setTitle(copilot->flightStateDescription());
+		flowPage->setFlowSteps(copilot->pilotFlyingFlowSteps());
+	});
+
+	mainWindow->showPage(flowPage);
+}
 
 PLUGIN_API int XPluginStart(
 							char *		outName,
@@ -86,8 +104,15 @@ PLUGIN_API int XPluginStart(
 	//button = new Button("Start Flight");
 	copilot = new Copilot();
 
+	auto welcomePage = std::make_shared<WelcomePage>();
+	// order matters
+	welcomePage->flightStartedEvent()->connect(onFlightStarted);
+	welcomePage->flightStartedEvent()->connect([]() { copilot->startFlight(); });
+
+	mainWindow->showPage(welcomePage);
+
 	//button->buttonClickedEvent()->connect([]() { copilot -> startFlight(); });
-	mainWindow->flightStartedEvent()->connect([]() { copilot->startFlight(); });
+	//mainWindow->flightStartedEvent()->connect([]() { copilot->startFlight(); });
 
 	return mainWindow != NULL;
 }
@@ -106,6 +131,7 @@ PLUGIN_API void	XPluginStop(void)
 PLUGIN_API void XPluginDisable(void) { }
 PLUGIN_API int  XPluginEnable(void)  { return 1; }
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void * inParam) { }
+
 
 void draw_hello_world(XPLMWindowID in_window_id, void * in_refcon)
 {

@@ -99,6 +99,11 @@ bool BeforeStartFlow::completed() const
     return m_flowState == FlowState::Completed;
 }
 
+std::vector<std::string> BeforeStartFlow::pilotFlyingFlowSteps() const
+{
+    return {};
+}
+
 float BeforeStartFlow::nextState()
 {
     return 0.0f;

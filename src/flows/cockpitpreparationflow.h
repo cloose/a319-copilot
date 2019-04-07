@@ -14,6 +14,8 @@ public:
 	virtual float update();
 	virtual bool completed() const;
 
+	virtual std::vector<std::string> pilotFlyingFlowSteps() const;
+
 private:
     float nextState();
 

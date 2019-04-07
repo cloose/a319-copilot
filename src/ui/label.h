@@ -10,6 +10,8 @@ public:
     explicit Label(const std::string& text);
     virtual ~Label();
 
+    void setText(const std::string& text);
+    
     void draw(int windowLeft, int windowTop, int windowRight, int windowBottom);
 
 private:

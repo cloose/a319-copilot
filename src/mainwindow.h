@@ -4,9 +4,7 @@
 #include <memory>
 #include "window.h"
 
-class Button;
-class ButtonClickedEvent;
-class Label;
+class Page;
 
 class MainWindow : public Window
 {
@@ -14,15 +12,14 @@ public:
     explicit MainWindow(const std::string& title);
     virtual ~MainWindow();
 
-    ButtonClickedEvent* flightStartedEvent() const;
+    void showPage(std::shared_ptr<Page> page);
 
 protected:
     virtual void onDrawWindow();
     virtual int onMouseClicked(int x, int y, XPLMMouseStatus status);
 
 private:
-    std::unique_ptr<Label> m_title;
-    std::unique_ptr<Button> m_startFlightButton;
+    std::shared_ptr<Page> m_page;
 };
 
 #endif // _MAINWINDOW_H_

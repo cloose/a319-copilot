@@ -16,9 +16,12 @@ set(SRC utils/cominstancecreationfailed.cpp
         flows/cockpitpreparationflow.cpp
         ui/button.cpp
         ui/label.cpp
+        ui/textarea.cpp
         copilot.cpp
+        flowpage.cpp
         mainwindow.cpp
         speechsynthesizer.cpp
+        welcomepage.cpp
         window.cpp
         xplane.cpp)
 
@@ -36,9 +39,14 @@ set(HDR utils/comhelper.h
         ui/button.h
         ui/buttonclickedevent.h
         ui/label.h
+        ui/textarea.h
         copilot.h
+        flightstate.h
+        flowpage.h
         mainwindow.h
+        page.h
         speechsynthesizer.h
+        welcomepage.h
         window.h)
 
 add_compile_definitions(IBM XPLM200 XPLM210 XPLM300 XPLM301)
