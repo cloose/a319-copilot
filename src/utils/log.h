@@ -41,6 +41,7 @@ public:
     static void endl(Log& log);
 
     Log& operator<<(const std::string& text);
+    Log& operator<<(int number);
     Log& operator<<(const std::function<void(Log&)> func);
 
 private:
