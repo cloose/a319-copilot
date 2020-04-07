@@ -6,8 +6,10 @@
 
 #include "buttonclickedevent.h"
 
-Button::Button(const std::string& text)
+Button::Button(const std::string& text, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
     : m_text(text)
+    , m_horizontalAlignment(horizontalAlignment)
+    , m_verticalAlignment(verticalAlignment)
     , m_position{0, 0, 0, 0}
     , m_buttonClickedEvent(new ButtonClickedEvent())
 {
@@ -34,10 +36,7 @@ void Button::draw(int windowLeft, int windowTop, int windowRight, int windowBott
     int buttonWidth = textWidth + 40;
     int buttonHeight = char_height + 20;
 
-    m_position.left = windowLeft + (windowRight - windowLeft - buttonWidth) / 2;
-    m_position.top = windowTop - (windowTop - windowBottom - buttonHeight) / 2;
-    m_position.right = m_position.left + buttonWidth;
-    m_position.bottom = m_position.top - buttonHeight;
+    positionButton(windowLeft, windowTop, windowRight, windowBottom);
 
     glColor4fv(col_blue);
     glBegin(GL_QUADS);
@@ -64,6 +63,47 @@ bool Button::handleMouseClick(int x, int y, XPLMMouseStatus mouseStatus)
     return handled;
 }
 
-bool Button::isInside(int x, int y) {
+void Button::positionButton(int windowLeft, int windowTop, int windowRight, int windowBottom)
+{
+    int char_height;
+    XPLMGetFontDimensions(xplmFont_Proportional, NULL, &char_height, NULL);
+    int textWidth = XPLMMeasureString(xplmFont_Proportional, m_text.c_str(), m_text.length());
+
+    int buttonWidth = textWidth + 40;
+    int buttonHeight = char_height + 20;
+
+    switch (m_horizontalAlignment) {
+        case HorizontalAlignment::Left:
+            m_position.left = windowLeft + 10;
+            m_position.right = m_position.left + buttonWidth;
+            break;
+        case HorizontalAlignment::Center:
+            m_position.left = windowLeft + (windowRight - windowLeft - buttonWidth) / 2;
+            m_position.right = m_position.left + buttonWidth;
+            break;
+        case HorizontalAlignment::Right:
+            m_position.right = windowRight - 10;
+            m_position.left = m_position.right - buttonWidth;
+            break;
+    }
+
+    switch (m_verticalAlignment) {
+        case VerticalAlignment::Top:
+            m_position.top = windowTop - 10;
+            m_position.bottom = m_position.top - buttonHeight;
+            break;
+        case VerticalAlignment::Center:
+            m_position.top = windowTop - (windowTop - windowBottom - buttonHeight) / 2;
+            m_position.bottom = m_position.top - buttonHeight;
+            break;
+        case VerticalAlignment::Bottom:
+            m_position.bottom = windowBottom + 10;
+            m_position.top = m_position.bottom + buttonHeight;
+            break;
+    }
+}
+
+bool Button::isInside(int x, int y) 
+{
     return ((x >= m_position.left) && (x < m_position.right) && (y >= m_position.bottom) && (y < m_position.top));
 }

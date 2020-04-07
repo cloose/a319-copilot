@@ -7,10 +7,22 @@
 typedef int XPLMMouseStatus;
 class ButtonClickedEvent;
 
+enum class HorizontalAlignment {
+    Left,
+	Center,
+	Right
+};
+
+enum class VerticalAlignment {
+    Top,
+	Center,
+	Bottom
+};
+
 class Button
 {
 public:
-    explicit Button(const std::string& text);
+    explicit Button(const std::string& text, HorizontalAlignment horizontalAlignment = HorizontalAlignment::Center, VerticalAlignment verticalAlignment = VerticalAlignment::Center);
     virtual ~Button();
 
     ButtonClickedEvent* buttonClickedEvent() const;
@@ -19,6 +31,7 @@ public:
     bool handleMouseClick(int x, int y, XPLMMouseStatus mouseStatus);
 
 private:
+    void positionButton(int windowLeft, int windowTop, int windowRight, int windowBottom);
     bool isInside(int x, int y);
 
     struct Rectangle {
@@ -29,6 +42,8 @@ private:
     };
 
     std::string m_text;
+    HorizontalAlignment m_horizontalAlignment;
+    VerticalAlignment m_verticalAlignment;
     Button::Rectangle m_position;
     std::unique_ptr<ButtonClickedEvent> m_buttonClickedEvent;
 };
