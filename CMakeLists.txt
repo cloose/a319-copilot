@@ -10,13 +10,6 @@ set(XPLANE_LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SDK/Libraries/Win" CACHE STR
 #
 # Find OpenGL
 #
-if(MINGW)
-  find_package(OpenGL REQUIRED)
-  if(OPENGL_FOUND)
-    message("OpenGL found for MinGW target")
-  else()
-    message("Unable to find OpenGL for MinGW target")
-  endif()
-endif()
+find_package(OpenGL REQUIRED)
        
 add_subdirectory(src)
