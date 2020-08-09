@@ -77,8 +77,8 @@ public:
     operator SimType() const;
     const DataRef& operator=(const SimType& rhs);
 
-    typename dataref_trait<SimType>::BasicType operator[](std::size_t index) const;
-    void setValue(std::size_t index, typename dataref_trait<SimType>::BasicType value) { operator =(value); }
+    typename dataref_trait<SimType>::BasicType operator[](int index) const;
+    void setValue(int index, typename dataref_trait<SimType>::BasicType value) { operator =(value); }
 
     DataRef(const DataRef&) = delete;
 
@@ -152,18 +152,18 @@ template <> const DataRef<std::vector<float>>& DataRef<std::vector<float>>::oper
 template <> const DataRef<std::string>& DataRef<std::string>::operator=(const std::string&);
 
 template <typename SimType>
-typename dataref_trait<SimType>::BasicType DataRef<SimType>::operator[](std::size_t) const
+typename dataref_trait<SimType>::BasicType DataRef<SimType>::operator[](int) const
 {
     typedef typename dataref_trait<SimType>::BasicType T;
     return T(*this);
 }
 
-template<> dataref_trait<std::vector<float>>::BasicType DataRef<std::vector<float> >::operator[](std::size_t index) const;
-template<> dataref_trait<std::vector<int>>::BasicType DataRef<std::vector<int> >::operator[](std::size_t index) const;
-template<> dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](std::size_t index) const;
+template<> dataref_trait<std::vector<float>>::BasicType DataRef<std::vector<float> >::operator[](int index) const;
+template<> dataref_trait<std::vector<int>>::BasicType DataRef<std::vector<int> >::operator[](int index) const;
+template<> dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](int index) const;
 
-template<> void DataRef<std::vector<int>>::setValue(std::size_t index, int value);
-template<> void DataRef<std::vector<float>>::setValue(std::size_t index, float value);
-template<> void DataRef<std::string>::setValue(std::size_t index, char value);
+template<> void DataRef<std::vector<int>>::setValue(int index, int value);
+template<> void DataRef<std::vector<float>>::setValue(int index, float value);
+template<> void DataRef<std::string>::setValue(int index, char value);
 
 #endif // _DATAREF_H_

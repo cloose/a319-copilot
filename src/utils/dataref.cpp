@@ -123,21 +123,21 @@ const DataRef<std::string>& DataRef<std::string>::operator=(const std::string& v
 }
 
 template<>
-dataref_trait<std::vector<int>>::BasicType DataRef<std::vector<int>>::operator[](std::size_t index) const
+dataref_trait<std::vector<int>>::BasicType DataRef<std::vector<int>>::operator[](int index) const
 {
     const std::vector<int>& vi(*this);
     return vi[index];
 }
 
 template<>
-dataref_trait<std::vector<float>>::BasicType DataRef<std::vector<float>>::operator[](std::size_t index) const
+dataref_trait<std::vector<float>>::BasicType DataRef<std::vector<float>>::operator[](int index) const
 {
     const std::vector<float>& vf(*this);
     return vf[index];
 }
 
 template<>
-dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](std::size_t index) const
+dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](int index) const
 {
     std::string result;
     result.resize(XPLMGetDatab(m_dataRef, nullptr, 0, 0));
@@ -146,21 +146,21 @@ dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](std::size
 }
 
 template<>
-void DataRef<std::vector<int>>::setValue(std::size_t index, int value)
+void DataRef<std::vector<int>>::setValue(int index, int value)
 {
     int* values = new int[1] {value};
     XPLMSetDatavi(m_dataRef, values, index, 1);
 }
 
 template<>
-void DataRef<std::vector<float>>::setValue(std::size_t index, float value)
+void DataRef<std::vector<float>>::setValue(int index, float value)
 {
     float* values = new float[1] {value};
     XPLMSetDatavf(m_dataRef, values, index, 1);
 }
 
 template<>
-void DataRef<std::string>::setValue(std::size_t index, char value)
+void DataRef<std::string>::setValue(int index, char value)
 {
     char* values = new char[1] {value};
     XPLMSetDatab(m_dataRef, values, index, 1);
