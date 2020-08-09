@@ -6,7 +6,7 @@
 struct Color {
     std::array<float, 3> values;
 
-    Color(float r, float g, float b) : values({ r, g, b }) { }
+    constexpr Color(float r, float g, float b) : values({ r, g, b }) { }
 
     operator float*() { return values.data(); }
     operator const float*() const { return values.data(); }

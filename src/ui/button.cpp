@@ -1,5 +1,10 @@
 #include "button.h"
 
+#if IBM
+    #define WIN32_LEAN_AND_MEAN
+	#include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <XPLM/XPLMDisplay.h>
 #include <XPLM/XPLMGraphics.h>

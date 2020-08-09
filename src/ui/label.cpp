@@ -1,7 +1,5 @@
 #include "label.h"
 
-#include <GL/gl.h>
-#include <XPLM/XPLMDisplay.h>
 #include <XPLM/XPLMGraphics.h>
 
 Label::Label(const std::string& text)

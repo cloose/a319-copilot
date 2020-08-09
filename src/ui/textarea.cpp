@@ -1,7 +1,5 @@
 #include "textarea.h"
 
-#include <GL/gl.h>
-#include <XPLM/XPLMDisplay.h>
 #include <XPLM/XPLMGraphics.h>
 
 #include "color.h"
