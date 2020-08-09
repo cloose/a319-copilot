@@ -1,20 +1,24 @@
 #include "beforestartflow.h"
 
-#include <XPLMUtilities.h>
+#include <XPLM/XPLMUtilities.h>
 
 #include <log.h>
 #include <command.h>
 #include <dataref.h>
 
-enum class FlowState {
+#include "airplane.h"
+
+enum class FlowState
+{
     ParkingBrake,
     ExternalPower,
-	Beacon,
+    Beacon,
     Completed
 };
 
-BeforeStartFlow::BeforeStartFlow()
-    : m_flowState(FlowState::ParkingBrake)
+BeforeStartFlow::BeforeStartFlow(std::shared_ptr<Airplane> airplane)
+    : Flow(airplane)
+    , m_flowState(FlowState::ParkingBrake)
 {
 }
 
@@ -49,59 +53,66 @@ BeforeStartFlow::BeforeStartFlow()
 // AirbusFBW/EnableExternalPower
 //
 // ckpt/oh/beaconLight/anim
+//
+// AirbusFBW/MCDU1cont3b - flaps wanted position
 float BeforeStartFlow::update()
 {
-    try {
-        if (m_flowState == FlowState::ParkingBrake) {
-            DataRef<int> parkingBrake("AirbusFBW/ParkBrake", ReadWriteType::ReadWrite);
-            parkingBrake = 1;
-            Log() << "[COPILOT] set parking brake" << Log::endl;
-            XPLMSpeakString("parking brake is set\n");
+    if (m_flowState == FlowState::ParkingBrake)
+    {
+        DataRef<int> parkingBrake("AirbusFBW/ParkBrake", ReadWriteType::ReadWrite);
+        parkingBrake = 1;
+        Log() << "[COPILOT] set parking brake" << Log::endl;
+        XPLMSpeakString("parking brake is set\n");
 
-            m_flowState = FlowState::ExternalPower;
-            return 1.0f;
+        m_flowState = FlowState::ExternalPower;
+        return 1.0f;
+    }
+
+    if (m_flowState == FlowState::ExternalPower)
+    {
+        DataRef<int> apuGeneratorOn("sim/cockpit/electrical/generator_apu_on", ReadWriteType::ReadOnly);
+        DataRef<int> gpuOn{"sim/cockpit/electrical/gpu_on"};
+        if (apuGeneratorOn == 1 && gpuOn == 0)
+        {
+            DataRef<int> enableExternalPower("AirbusFBW/EnableExternalPower", ReadWriteType::ReadWrite);
+            enableExternalPower = 0;
+            Log() << "[COPILOT] disconnect external power" << Log::endl;
+            XPLMSpeakString("external power disconnected\n");
+            m_flowState = FlowState::Beacon;
         }
 
-        if (m_flowState == FlowState::ExternalPower) {
-            DataRef<int> apuAvailable("AirbusFBW/APUAvail", ReadWriteType::ReadOnly);
-            if (apuAvailable == 1) {
-                DataRef<int> enableExternalPower("AirbusFBW/EnableExternalPower", ReadWriteType::ReadWrite);
-                enableExternalPower = 0;
-                Log() <<"[COPILOT] disconnect external power" << Log::endl;
-                XPLMSpeakString("external power disconnected\n");
-                m_flowState = FlowState::Beacon;
-            }
+        return 1.0f;
+    }
 
-            return 1.0f;
-        }
+    if (m_flowState == FlowState::Beacon)
+    {
+        //DataRef<int> beaconLight("ckpt/oh/beaconLight/anim", ReadWriteType::ReadWrite);
+        //beaconLight = 1;
+        m_airplane->setPosition(OverheadLightSwitch::Beacon, 1);
+        Log() << "[COPILOT] set beacon to on" << Log::endl;
 
-        if (m_flowState == FlowState::Beacon) {
-            DataRef<int> beaconLight("ckpt/oh/beaconLight/anim", ReadWriteType::ReadWrite);
-            beaconLight = 1;
-            Log() << "[COPILOT] set beacon to on" << Log::endl;
-
-            m_flowState = FlowState::Completed;
-            return 0.0f;
-        }
-    } catch(DataRefLookupException& ex) {
-        XPLMDebugString(ex.what());
-    } catch(CommandLookupException& ex) {
-        XPLMDebugString(ex.what());
-    } catch(std::runtime_error& ex) {
-        XPLMDebugString(ex.what());
+        m_flowState = FlowState::Completed;
+        return 0.0f;
     }
 
     return 0.0f;
 }
 
+// AirbusFBW/APUMaster 1 && AirbusFBW/APUStarter 1 && sim/cockpit/electrical/generator_apu_on 1 && AirbusFBW/APUAvail 1
+// AirbusFBW/APUBleedSwitch 1
+// sim/cockpit/electrical/gpu_on 0
 bool BeforeStartFlow::completed() const
 {
     return m_flowState == FlowState::Completed;
 }
 
-std::vector<std::string> BeforeStartFlow::pilotFlyingFlowSteps() const
+std::vector<FlowStep> BeforeStartFlow::pilotFlyingFlowSteps() const
 {
-    return {};
+    return {
+        FlowStep("APU..................", "START", [] { return DataRef<int>{"AirbusFBW/APUMaster"} == 1 && (DataRef<int>{"AirbusFBW/APUStarter"} == 1 || DataRef<int>{"AirbusFBW/APUAvail"} == 1) ? color_green : color_white; }),
+        FlowStep("APU BLEED...............", "ON", [] { return DataRef<int>{"AirbusFBW/APUBleedSwitch"} == 1 ? color_green : color_white; }),
+        FlowStep("EXT POWER..............", "OFF", [] { return DataRef<int>{"sim/cockpit/electrical/gpu_on"} == 0 ? color_green : color_white; })
+    };
 }
 
 float BeforeStartFlow::nextState()

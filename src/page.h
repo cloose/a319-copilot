@@ -1,7 +1,7 @@
 #ifndef _PAGE_H_
 #define _PAGE_H_
 
-#include <XPLMDisplay.h>
+#include <XPLM/XPLMDisplay.h>
 
 class Page 
 {

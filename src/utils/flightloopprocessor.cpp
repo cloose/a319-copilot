@@ -1,6 +1,6 @@
 #include "flightloopprocessor.h"
 
-#include <XPLMProcessing.h>
+#include <XPLM/XPLMProcessing.h>
 
 FlightLoopProcessor::FlightLoopProcessor(float startInterval, std::function<float(float, float, int)> callbackHandler)
     : m_callbackHandler(callbackHandler)

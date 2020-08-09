@@ -1,6 +1,7 @@
-#include <XPLMPlugin.h>
-#include <XPLMDisplay.h>
-#include <XPLMGraphics.h>
+#include <XPLM/XPLMPlugin.h>
+#include <XPLM/XPLMDisplay.h>
+#include <XPLM/XPLMGraphics.h>
+#include <XPLM/XPLMUtilities.h>
 #include <string.h>
 #if IBM
 	#include <windows.h>
@@ -27,6 +28,7 @@
 	#error This is made to be compiled against the XPLM301 SDK
 #endif
 
+
 // An opaque handle to the window we will create
 //static XPLMWindowID	g_window;
 static MainWindow* mainWindow;
@@ -49,6 +51,10 @@ void onFlightStarted()
 		Log() << "flight state changed -> update title: " << copilot->flightStateDescription() << Log::endl;
 		flowPage->setTitle(copilot->flightStateDescription());
 		flowPage->setFlowSteps(copilot->pilotFlyingFlowSteps());
+	});
+	
+	flowPage->nextFlowEvent()->connect([]() {
+		copilot->startFlight();
 	});
 
 	mainWindow->showPage(flowPage);
@@ -99,17 +105,27 @@ PLUGIN_API int XPluginStart(
 
 	LogWriter::getLogWriter().openLogFile("a319-copilot.txt");
 	
+	XPLMDebugString("A319 - create main window\n");
 	mainWindow = new MainWindow("A319 Copilot");
 
+try {
+	XPLMDebugString("A319 - create copilot\n");
 	//button = new Button("Start Flight");
 	copilot = new Copilot();
 
+	XPLMDebugString("A319 - setup welcome page\n");
 	auto welcomePage = std::make_shared<WelcomePage>();
 	// order matters
 	welcomePage->flightStartedEvent()->connect(onFlightStarted);
 	welcomePage->flightStartedEvent()->connect([]() { copilot->startFlight(); });
 
+	XPLMDebugString("A319 - show welcome page\n");
 	mainWindow->showPage(welcomePage);
+	} catch (const std::exception& e) {
+		XPLMDebugString(e.what());
+		XPLMDebugString("\n");
+		return false;
+	}
 
 	//button->buttonClickedEvent()->connect([]() { copilot -> startFlight(); });
 	//mainWindow->flightStartedEvent()->connect([]() { copilot->startFlight(); });

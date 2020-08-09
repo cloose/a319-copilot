@@ -1,11 +1,6 @@
 #include "window.h"
-#include <functional>
-using namespace std::placeholders;
 
-static int					dummy_mouse_handler(XPLMWindowID in_window_id, int x, int y, int is_down, void * in_refcon) { return 0; }
-static XPLMCursorStatus	handle_cursor_status(XPLMWindowID in_window_id, int x, int y, void * in_refcon) { return xplm_CursorCustom; }
-static int					dummy_wheel_handler(XPLMWindowID in_window_id, int x, int y, int wheel, int clicks, void * in_refcon) { return 0; }
-static void				dummy_key_handler(XPLMWindowID in_window_id, char key, XPLMKeyFlags flags, char virtual_key, void * in_refcon, int losing_focus) { }
+#include <XPLM/XPLMGraphics.h>
 
 Window::Window(const std::string& title)
     : m_title(title)
@@ -26,10 +21,10 @@ void Window::createWindow()
 	params.visible = 1;
 	params.drawWindowFunc = [](XPLMWindowID window, void* refcon) { reinterpret_cast<Window*>(refcon)->onDrawWindow(); };
 	params.handleMouseClickFunc = [](XPLMWindowID window, int x, int y, XPLMMouseStatus status, void* refcon) -> int { return reinterpret_cast<Window*>(refcon)->onMouseClicked(x, y, status); };
-	params.handleRightClickFunc = dummy_mouse_handler;
-	params.handleMouseWheelFunc = dummy_wheel_handler;
-	params.handleKeyFunc = dummy_key_handler;
-	params.handleCursorFunc = handle_cursor_status;
+	params.handleRightClickFunc = [](XPLMWindowID window, int x, int y, int is_down, void* refcon) -> int { return 0; };
+	params.handleMouseWheelFunc = [](XPLMWindowID window, int x, int y, int wheel, int clicks, void* refcon) -> int { return 0; };
+	params.handleKeyFunc = [](XPLMWindowID window, char key, XPLMKeyFlags flags, char virtual_key, void* refcon, int losing_focus) {};
+	params.handleCursorFunc = [](XPLMWindowID window, int x, int y, void* refcon) -> XPLMCursorStatus { return xplm_CursorCustom; };
 	params.refcon = this;
 	params.layer = xplm_WindowLayerFloatingWindows;
     params.decorateAsFloatingWindow = xplm_WindowDecorationRoundRectangle;
@@ -42,13 +37,31 @@ void Window::createWindow()
 	params.left = left + 50;
 	params.bottom = bottom + 150;
 	params.right = params.left + 200;
-	params.top = params.bottom + 200;
+	params.top = params.bottom + 500;
 
     m_window = XPLMCreateWindowEx(&params);
 
     // Position the window as a "free" floating window, which the user can drag around
     XPLMSetWindowPositioningMode(m_window, xplm_WindowPositionFree, -1);
     // Limit resizing our window: maintain a minimum width/height of 100 boxels and a max width/height of 300 boxels
-    XPLMSetWindowResizingLimits(m_window, 200, 200, 300, 300);
+    XPLMSetWindowResizingLimits(m_window, 200, 200, 300, 600);
     XPLMSetWindowTitle(m_window, m_title.c_str());
+}
+
+void Window::initGraphicsState()
+{
+	XPLMSetGraphicsState(
+						 0 /* no fog */,
+						 0 /* 0 texture units */,
+						 0 /* no lighting */,
+						 0 /* no alpha testing */,
+						 1 /* do alpha blend */,
+						 1 /* do depth testing */,
+						 0 /* no depth writing */
+						 );
+}
+
+void Window::getWindowGeometry(int* left, int* top, int* right, int* bottom)
+{
+	XPLMGetWindowGeometry(m_window, left, top, right, bottom);
 }

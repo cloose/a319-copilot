@@ -12,7 +12,7 @@ struct Color {
     operator const float*() const { return values.data(); }
 };
 
-static const Color color_white { 1.0, 0.0, 0.0 };
+static const Color color_white { 1.0, 1.0, 1.0 };
 static const Color color_red { 1.0, 0.0, 0.0 };
 static const Color color_green { 0.0, 1.0, 0.0 };
 static const Color color_blue { 0.0, 0.0, 1.0 };

@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 #include <string>
-#include <XPLMUtilities.h>
+#include <XPLM/XPLMUtilities.h>
 
 class CommandLookupException : public std::runtime_error
 {

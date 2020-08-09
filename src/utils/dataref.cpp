@@ -33,6 +33,14 @@ void DataRef<std::vector<float>>::checkDataType()
 }
 
 template <>
+void DataRef<std::string>::checkDataType()
+{
+    if (XPLMGetDataRefTypes(m_dataRef) != xplmType_Data) {
+        throw DataRefLookupException(m_identifier + " declared to be byte array, but isn't.");
+    }
+}
+
+template <>
 DataRef<int>::operator int() const
 {
     return XPLMGetDatai(m_dataRef);
@@ -57,6 +65,15 @@ DataRef<std::vector<float>>::operator std::vector<float>() const
 {
     std::vector<float> result(XPLMGetDatavf(m_dataRef, nullptr, 0, 0));
     XPLMGetDatavf(m_dataRef, &result[0], 0, result.size());
+    return result;
+}
+
+template <>
+DataRef<std::string>::operator std::string() const
+{
+    std::string result;
+    result.resize(XPLMGetDatab(m_dataRef, nullptr, 0, 0));
+    XPLMGetDatab(m_dataRef, &result[0], 0, result.size());
     return result;
 }
 
@@ -94,4 +111,57 @@ const DataRef<std::vector<float>>& DataRef<std::vector<float>>::operator=(const 
         XPLMSetDatavf(m_dataRef, const_cast<float*>(&value[0]), 0, value.size());
     }
     return *this;
+}
+
+template <>
+const DataRef<std::string>& DataRef<std::string>::operator=(const std::string& value)
+{
+    if (m_readWriteType != ReadWriteType::ReadOnly) {
+        XPLMSetDatab(m_dataRef, const_cast<char*>(value.c_str()) , 0, value.size() + 1);
+    }
+    return *this;
+}
+
+template<>
+dataref_trait<std::vector<int>>::BasicType DataRef<std::vector<int>>::operator[](std::size_t index) const
+{
+    const std::vector<int>& vi(*this);
+    return vi[index];
+}
+
+template<>
+dataref_trait<std::vector<float>>::BasicType DataRef<std::vector<float>>::operator[](std::size_t index) const
+{
+    const std::vector<float>& vf(*this);
+    return vf[index];
+}
+
+template<>
+dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](std::size_t index) const
+{
+    std::string result;
+    result.resize(XPLMGetDatab(m_dataRef, nullptr, 0, 0));
+    XPLMGetDatab(m_dataRef, &result[0], 0, result.size());
+    return result[index];
+}
+
+template<>
+void DataRef<std::vector<int>>::setValue(std::size_t index, int value)
+{
+    int* values = new int[1] {value};
+    XPLMSetDatavi(m_dataRef, values, index, 1);
+}
+
+template<>
+void DataRef<std::vector<float>>::setValue(std::size_t index, float value)
+{
+    float* values = new float[1] {value};
+    XPLMSetDatavf(m_dataRef, values, index, 1);
+}
+
+template<>
+void DataRef<std::string>::setValue(std::size_t index, char value)
+{
+    char* values = new char[1] {value};
+    XPLMSetDatab(m_dataRef, values, index, 1);
 }

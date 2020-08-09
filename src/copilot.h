@@ -5,9 +5,11 @@
 #include <string>
 #include <vector>
 
+class Airplane;
 enum class FlightState;
 class FlightLoopProcessor;
 class FlightStateChangedEvent;
+struct FlowStep;
 class Flow;
 class SpeechSynthesizer;
 
@@ -23,11 +25,12 @@ public:
 
     FlightStateChangedEvent* flightStateChangedEvent() const;
     std::string flightStateDescription() const;
-	std::vector<std::string> pilotFlyingFlowSteps() const;
+	std::vector<FlowStep> pilotFlyingFlowSteps() const;
     
 private:
     void nextState();
     
+    std::shared_ptr<Airplane> m_airplane;
     FlightState m_flightState;
     std::unique_ptr<FlightLoopProcessor> m_flightLoopProcessor;
     std::unique_ptr<Flow> m_flow;

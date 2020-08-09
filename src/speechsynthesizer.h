@@ -13,6 +13,7 @@ public:
 	~SpeechSynthesizer();
 
 	void speak(const std::wstring& text);
+	void speakAsync(const std::wstring& text);
 
 private:
 	ComPtr<ISpVoice> voice;

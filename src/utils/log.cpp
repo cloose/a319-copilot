@@ -32,6 +32,12 @@ Log& Log::operator<<(int number)
     return *this;
 }
 
+Log& Log::operator<<(float number)
+{
+    m_stream << number;
+    return *this;
+}
+
 Log& Log::operator<<(const std::function<void(Log&)> func)
 {
     func(*this);

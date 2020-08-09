@@ -1,8 +1,8 @@
 #include "label.h"
 
 #include <GL/gl.h>
-#include <XPLMDisplay.h>
-#include <XPLMGraphics.h>
+#include <XPLM/XPLMDisplay.h>
+#include <XPLM/XPLMGraphics.h>
 
 Label::Label(const std::string& text)
     : m_text(text)

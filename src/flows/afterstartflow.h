@@ -1,15 +1,15 @@
-#ifndef _BEFORE_START_FLOW_H_
-#define _BEFORE_START_FLOW_H_
+#ifndef _AFTER_START_FLOW_H_
+#define _AFTER_START_FLOW_H_
 
 #include "flow.h"
 
 enum class FlowState;
 
-class BeforeStartFlow : public Flow
+class AfterStartFlow : public Flow
 {
 public:
-    explicit BeforeStartFlow(std::shared_ptr<Airplane> airplane);
-	virtual ~BeforeStartFlow() {}
+    explicit AfterStartFlow(std::shared_ptr<Airplane> airplane);
+	virtual ~AfterStartFlow() {}
 
 	virtual float update();
 	virtual bool completed() const;
@@ -22,4 +22,4 @@ private:
     FlowState m_flowState;
 };
 
-#endif // _BEFORE_START_FLOW_H_
+#endif // _AFTER_START_FLOW_H_

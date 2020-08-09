@@ -42,6 +42,7 @@ public:
 
     Log& operator<<(const std::string& text);
     Log& operator<<(int number);
+    Log& operator<<(float number);
     Log& operator<<(const std::function<void(Log&)> func);
 
 private:

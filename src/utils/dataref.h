@@ -31,7 +31,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <XPLMDataAccess.h>
+#include <XPLM/XPLMDataAccess.h>
 
 class DataRefLookupException : public std::runtime_error
 {
@@ -50,6 +50,23 @@ struct dataref_trait {
     typedef T BasicType;
 };
 
+template <>
+struct dataref_trait<std::vector<float>> {
+    typedef float BasicType;
+    std::vector<float> m_cache;
+};
+
+template <>
+struct dataref_trait<std::vector<int>> {
+    typedef int BasicType;
+    std::vector<int> m_cache;
+};
+
+template <>
+struct dataref_trait<std::string> {
+    typedef char BasicType;
+};
+
 template <typename SimType>
 class DataRef : private dataref_trait<SimType>
 {
@@ -59,6 +76,9 @@ public:
 
     operator SimType() const;
     const DataRef& operator=(const SimType& rhs);
+
+    typename dataref_trait<SimType>::BasicType operator[](std::size_t index) const;
+    void setValue(std::size_t index, typename dataref_trait<SimType>::BasicType value) { operator =(value); }
 
     DataRef(const DataRef&) = delete;
 
@@ -117,15 +137,33 @@ template <> void DataRef<int>::checkDataType();
 template <> void DataRef<float>::checkDataType();
 template <> void DataRef<std::vector<int>>::checkDataType();
 template <> void DataRef<std::vector<float>>::checkDataType();
+template <> void DataRef<std::string>::checkDataType();
 
 template <> DataRef<int>::operator int() const;
 template <> DataRef<float>::operator float() const;
 template <> DataRef<std::vector<int>>::operator std::vector<int>() const;
 template <> DataRef<std::vector<float>>::operator std::vector<float>() const;
+template <> DataRef<std::string>::operator std::string() const;
 
 template <> const DataRef<int>& DataRef<int>::operator=(const int&);
 template <> const DataRef<float>& DataRef<float>::operator=(const float&);
 template <> const DataRef<std::vector<int>>& DataRef<std::vector<int>>::operator=(const std::vector<int>&);
 template <> const DataRef<std::vector<float>>& DataRef<std::vector<float>>::operator=(const std::vector<float>&);
+template <> const DataRef<std::string>& DataRef<std::string>::operator=(const std::string&);
+
+template <typename SimType>
+typename dataref_trait<SimType>::BasicType DataRef<SimType>::operator[](std::size_t) const
+{
+    typedef typename dataref_trait<SimType>::BasicType T;
+    return T(*this);
+}
+
+template<> dataref_trait<std::vector<float>>::BasicType DataRef<std::vector<float> >::operator[](std::size_t index) const;
+template<> dataref_trait<std::vector<int>>::BasicType DataRef<std::vector<int> >::operator[](std::size_t index) const;
+template<> dataref_trait<std::string>::BasicType DataRef<std::string>::operator[](std::size_t index) const;
+
+template<> void DataRef<std::vector<int>>::setValue(std::size_t index, int value);
+template<> void DataRef<std::vector<float>>::setValue(std::size_t index, float value);
+template<> void DataRef<std::string>::setValue(std::size_t index, char value);
 
 #endif // _DATAREF_H_

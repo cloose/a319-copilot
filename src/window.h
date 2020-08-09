@@ -2,8 +2,11 @@
 #define _WINDOW_H_
 
 #include <string>
-#include <XPLMDisplay.h>
+#include <XPLM/XPLMDisplay.h>
 
+//
+// A "modern" window in X-Plane 11 (XPLMCreateWindowEx).
+//
 class Window
 {
 public:
@@ -13,10 +16,14 @@ public:
 protected:
     virtual void createWindow();
 
+    virtual void initGraphicsState();
+    virtual void getWindowGeometry(int* left, int* top, int* right, int* bottom);
+
+    // events
     virtual void onDrawWindow() = 0;
     virtual int onMouseClicked(int x, int y, XPLMMouseStatus status) = 0;
 
-//private:
+private:
     std::string m_title;
     XPLMWindowID m_window;
 };

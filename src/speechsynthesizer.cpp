@@ -1,6 +1,6 @@
 #include "speechsynthesizer.h"
 
-#include <XPLMUtilities.h>
+#include <XPLM/XPLMUtilities.h>
 #include "utils/ComInstanceCreationFailed.h"
 
 SpeechSynthesizer::SpeechSynthesizer()
@@ -19,4 +19,9 @@ SpeechSynthesizer::~SpeechSynthesizer()
 void SpeechSynthesizer::speak(const std::wstring & text)
 {
 	voice->Speak(text.c_str(), 0, NULL);
+}
+
+void SpeechSynthesizer::speakAsync(const std::wstring & text)
+{
+	voice->Speak(text.c_str(), SPF_ASYNC, NULL);
 }

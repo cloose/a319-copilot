@@ -9,7 +9,11 @@ enum class FlightState {
 	CockpitPreparation,
 	BeforeStart,
 	EngineStart,
-	AfterStart
+	AfterStart,
+	Taxi,
+	BeforeTakeoffFlow,
+	TakeoffFlow,
+	AfterTakeoffFlow
 };
 
 class FlightStateChangedEvent {
