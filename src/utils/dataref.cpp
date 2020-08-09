@@ -165,3 +165,9 @@ void DataRef<std::string>::setValue(int index, char value)
     char* values = new char[1] {value};
     XPLMSetDatab(m_dataRef, values, index, 1);
 }
+
+template class DataRef<float>;
+template class DataRef<int>;
+template class DataRef<std::vector<float> >;
+template class DataRef<std::vector<int> >;
+template class DataRef<std::string>;
