@@ -1,17 +1,18 @@
 #include "flowpage.h"
 
-#include <log.h>
+#include <imgui.h>
+
 #include "flows/flow.h"
 #include "ui/button.h"
 #include "ui/buttonclickedevent.h"
 #include "ui/label.h"
 #include "ui/textarea.h"
+#include <log.h>
 
 FlowPage::FlowPage()
     : Page()
-	, m_title(new Label("Welcome Captain!"))
-    , m_textArea(new TextArea())
-    , m_nextFlowButton(new Button("Next Flow", HorizontalAlignment::Right, VerticalAlignment::Bottom))
+    , m_title("Welcome Captain!")
+    , m_nextFlowEvent(new ButtonClickedEvent())
 {
 }
 
@@ -20,51 +21,43 @@ FlowPage::~FlowPage()
     Log() << "delete flow page" << Log::endl;
 }
 
-ButtonClickedEvent* FlowPage::nextFlowEvent() const
+ButtonClickedEvent *FlowPage::nextFlowEvent() const
 {
-    return m_nextFlowButton->buttonClickedEvent();
+    return m_nextFlowEvent.get();
 }
 
-void FlowPage::setTitle(const std::string& title)
+void FlowPage::setTitle(const std::string &title)
 {
-    m_title->setText(title);
+    m_title = title;
 }
 
-void FlowPage::setFlowSteps(const std::vector<FlowStep>& flowSteps)
+void FlowPage::setFlowSteps(const std::vector<FlowStep> &flowSteps)
 {
     m_flowSteps = flowSteps;
 }
 
-void FlowPage::draw(int windowLeft, int windowTop, int windowRight, int windowBottom)
+void FlowPage::buildContent(const std::vector<ImFont*>& fonts)
 {
-    updateFlowSteps();
+    auto windowWidth = ImGui::GetWindowWidth();
+    auto textWidth = ImGui::CalcTextSize(m_title.c_str()).x;
 
-	m_title->draw(windowLeft, windowTop, windowRight, windowBottom);
-    m_textArea->draw(windowLeft, windowTop, windowRight, windowBottom);
-    m_nextFlowButton->draw(windowLeft, windowTop, windowRight, windowBottom);
-}
+    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5);
+    ImGui::TextUnformatted(m_title.c_str());
 
-int FlowPage::onMouseClicked(int x, int y, XPLMMouseStatus status)
-{
-    bool handled = m_nextFlowButton->handleMouseClick(x, y, status);
-	return handled ? 1 : 0;
-}
+    ImGui::PushFont(fonts[1]);
+    for (auto &&step : m_flowSteps) {
+        ImGui::Text(step.description.c_str());
 
-void FlowPage::updateFlowSteps() const
-{
-    std::vector<TextLine> m_lines;
+        ImGui::SameLine();
 
-    for (auto &&step : m_flowSteps)
-    {
-        TextLine line;
-        line.parts.push_back(step.description);
-        line.colors.push_back(color_white);
-
-        line.parts.push_back(step.state);
-        line.colors.push_back(step.condition());
-        
-        m_lines.push_back(line);
+        Color c = step.condition();
+        ImVec4 color {c.values[0], c.values[1], c.values[2], 1.0f};
+        ImGui::TextColored(color, step.state.c_str());
     }
-    
-    m_textArea->setLines(m_lines);
+    ImGui::PopFont();
+
+    if (ImGui::Button("Next Flow")) {
+        Log() << "Next Flow Button CLICKED" << Log::endl;
+        m_nextFlowEvent->emit();
+    }
 }

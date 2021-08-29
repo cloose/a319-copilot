@@ -1,0 +1,12 @@
+UseTab: Never
+IndentWidth: 4
+IndentCaseLabels: false
+
+ColumnLimit: 0
+
+BreakBeforeBraces: Linux
+BreakInheritanceList: BeforeComma
+BreakConstructorInitializers: BeforeComma
+
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All

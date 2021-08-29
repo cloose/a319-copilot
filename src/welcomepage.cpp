@@ -1,13 +1,15 @@
 #include "welcomepage.h"
 
-#include <log.h>
+#include <imgui.h>
+
 #include "ui/button.h"
+#include "ui/buttonclickedevent.h"
 #include "ui/label.h"
+#include <log.h>
 
 WelcomePage::WelcomePage()
     : Page()
-	, m_title(new Label("Welcome Captain!"))
-    , m_startFlightButton(new Button("Start Flight"))
+    , m_startFlightEvent(new ButtonClickedEvent())
 {
 }
 
@@ -16,19 +18,25 @@ WelcomePage::~WelcomePage()
     Log() << "delete welcome page" << Log::endl;
 }
 
-ButtonClickedEvent* WelcomePage::flightStartedEvent() const
+ButtonClickedEvent *WelcomePage::flightStartedEvent() const
 {
-    return m_startFlightButton->buttonClickedEvent();
+    return m_startFlightEvent.get();
 }
 
-void WelcomePage::draw(int windowLeft, int windowTop, int windowRight, int windowBottom)
+void WelcomePage::buildContent(const std::vector<ImFont *> &fonts)
 {
-	m_title->draw(windowLeft, windowTop, windowRight, windowBottom);
-	m_startFlightButton->draw(windowLeft, windowTop, windowRight, windowBottom);
-}
+    auto windowWidth = ImGui::GetWindowWidth();
+    auto textWidth = ImGui::CalcTextSize("Welcome Captain!").x;
 
-int WelcomePage::onMouseClicked(int x, int y, XPLMMouseStatus status)
-{
-    bool handled = m_startFlightButton->handleMouseClick(x, y, status);
-	return handled ? 1 : 0;
+    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5);
+    ImGui::TextUnformatted("Welcome Captain!");
+
+    auto windowHeight = ImGui::GetWindowHeight();
+    auto textSize = ImGui::CalcTextSize("Start Flight!");
+    ImGui::SetCursorPosX((windowWidth - textSize.x) * 0.5);
+    ImGui::SetCursorPosY((windowHeight - textSize.y) * 0.5);
+    if (ImGui::Button("Start Flight")) {
+        Log() << "Start Flight Button CLICKED" << Log::endl;
+        m_startFlightEvent->emit();
+    }
 }

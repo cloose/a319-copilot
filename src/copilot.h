@@ -20,6 +20,7 @@ public:
 	~Copilot();
 
     void startFlight();
+    void nextPhase();
 
     float update(float elapsedSinceLastCall, float elapsedTimeSinceLastFlightLoop, int counter);
 
@@ -27,9 +28,7 @@ public:
     std::string flightStateDescription() const;
 	std::vector<FlowStep> pilotFlyingFlowSteps() const;
     
-private:
-    void nextState();
-    
+private: 
     std::shared_ptr<Airplane> m_airplane;
     FlightState m_flightState;
     std::unique_ptr<FlightLoopProcessor> m_flightLoopProcessor;

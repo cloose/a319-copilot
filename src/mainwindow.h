@@ -1,25 +1,24 @@
-#ifndef _MAINWINDOW_H_
-#define _MAINWINDOW_H_
+#ifndef _NEW_MAINWINDOW_H_
+#define _NEW_MAINWINDOW_H_
 
+#include "ui/window.h"
 #include <memory>
-#include "window.h"
 
 class Page;
 
-class MainWindow : public Window
+class MainWindow : public UI::Window
 {
-public:
-    explicit MainWindow(const std::string& title);
+  public:
+    MainWindow(const std::string &title, UI::Rectangle geometry);
     virtual ~MainWindow();
 
     void showPage(std::shared_ptr<Page> page);
 
-protected:
-    virtual void onDrawWindow();
-    virtual int onMouseClicked(int x, int y, XPLMMouseStatus status);
+  protected:
+    void buildContent() override;
 
-private:
+  private:
     std::shared_ptr<Page> m_page;
 };
 
-#endif // _MAINWINDOW_H_
+#endif // _NEW_MAINWINDOW_H_

@@ -1,38 +1,31 @@
 #ifndef _FLOW_PAGE_H_
 #define _FLOW_PAGE_H_
 
+#include "flows/flowstep.h"
+#include "page.h"
 #include <memory>
 #include <string>
 #include <vector>
-#include "flows/flowstep.h"
-#include "page.h"
 
-class Button;
 class ButtonClickedEvent;
-class Label;
-class TextArea;
 
 class FlowPage : public Page
 {
-public:
+  public:
     explicit FlowPage();
     virtual ~FlowPage();
 
-    ButtonClickedEvent* nextFlowEvent() const;
+    ButtonClickedEvent *nextFlowEvent() const;
 
-    void setTitle(const std::string& title);
-    void setFlowSteps(const std::vector<FlowStep>& flowSteps);
-    
-    virtual void draw(int windowLeft, int windowTop, int windowRight, int windowBottom);
-    virtual int onMouseClicked(int x, int y, XPLMMouseStatus status);
+    void setTitle(const std::string &title);
+    void setFlowSteps(const std::vector<FlowStep> &flowSteps);
 
-private:
-    void updateFlowSteps() const;
+    void buildContent(const std::vector<ImFont *> &fonts) override;
 
-    std::unique_ptr<Label> m_title;
+  private:
+    std::string m_title;
     std::vector<FlowStep> m_flowSteps;
-    std::unique_ptr<TextArea> m_textArea;
-    std::unique_ptr<Button> m_nextFlowButton;
+    std::unique_ptr<ButtonClickedEvent> m_nextFlowEvent;
 };
 
 #endif // _FLOW_PAGE_H_
