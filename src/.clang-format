@@ -1,0 +1,18 @@
+UseTab: Never
+IndentWidth: 4
+IndentCaseLabels: false
+
+ColumnLimit: 0
+
+AlignOperands: Align
+PointerAlignment: Left
+
+BreakBeforeBraces: Linux
+BreakInheritanceList: BeforeComma
+BreakConstructorInitializers: BeforeComma
+
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
