@@ -21,17 +21,17 @@ class Window
     virtual ~Window();
 
   protected:
-    Window(const std::string &title, Rectangle geometry);
+    Window(const std::string& title, Rectangle geometry);
 
-    std::vector<ImFont *> fonts() const;
+    std::vector<ImFont*> fonts() const;
     virtual void buildContent() = 0;
 
   private:
-    void loadFonts(ImGuiIO &io);
+    void loadFonts(ImGuiIO& io);
     void createWindow(Rectangle geometry);
-    void updateMousePosition(ImGuiIO &io, int x, int y);
+    void updateMousePosition(ImGuiIO& io, int x, int y);
     void initGraphicsState(Rectangle geometry);
-    void renderUI(ImDrawData *drawData);
+    void renderUI(ImDrawData* drawData);
     void restoreGraphicsState();
 
     void onDrawWindow();
@@ -39,8 +39,8 @@ class Window
     int onCursorMoved(int x, int y);
 
     std::string m_title;
-    ImGuiContext *m_context;
-    std::vector<ImFont *> m_fonts;
+    ImGuiContext* m_context;
+    std::vector<ImFont*> m_fonts;
     XPLMWindowID m_window;
     float m_lastTimeDraw;
 };

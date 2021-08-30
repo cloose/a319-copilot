@@ -46,15 +46,15 @@ void OnFlightStarted()
         copilot->nextPhase();
     });
 
-	copilot->startFlight();
+    copilot->startFlight();
 
     mainWindow->showPage(flowPage);
 }
 
 PLUGIN_API int XPluginStart(
-    char *outName,
-    char *outSig,
-    char *outDesc)
+    char* outName,
+    char* outSig,
+    char* outDesc)
 {
     strcpy(outName, "A319-CoPilot");
     strcpy(outSig, "de.christian-loose.a319-copilot");
@@ -63,7 +63,7 @@ PLUGIN_API int XPluginStart(
     LogWriter::getLogWriter().openLogFile("a319-copilot.txt");
 
     try {
-        UI::Rectangle geometry = UI::Rectangle::fromCoordinates(50, 150, 300, 500);
+        UI::Rectangle geometry = UI::Rectangle::fromCoordinates(50, 150, 250, 500);
         Log() << "A319 - create main window " << geometry.left << ", " << geometry.top << ", " << geometry.right << ", " << geometry.bottom << Log::endl;
 
         mainWindow = std::make_unique<MainWindow>("A319 Copilot", geometry);
@@ -73,13 +73,11 @@ PLUGIN_API int XPluginStart(
 
         Log() << "A319 - setup welcome page" << Log::endl;
         auto welcomePage = std::make_shared<WelcomePage>();
-        //// order matters
         welcomePage->flightStartedEvent()->connect(OnFlightStarted);
-        //welcomePage->flightStartedEvent()->connect([]() { copilot->startFlight(); });
 
         Log() << "A319 - show welcome page" << Log::endl;
         mainWindow->showPage(welcomePage);
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         XPLMDebugString(e.what());
         XPLMDebugString("\n");
         Log() << e.what() << Log::endl;
@@ -97,4 +95,4 @@ PLUGIN_API void XPluginStop(void)
 
 PLUGIN_API void XPluginDisable(void) {}
 PLUGIN_API int XPluginEnable(void) { return 1; }
-PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void *inParam) {}
+PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void* inParam) {}

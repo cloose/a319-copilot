@@ -12,9 +12,9 @@ class WelcomePage : public Page
     explicit WelcomePage();
     virtual ~WelcomePage();
 
-    ButtonClickedEvent *flightStartedEvent() const;
+    ButtonClickedEvent* flightStartedEvent() const;
 
-    void buildContent(const std::vector<ImFont *> &fonts) override;
+    void buildContent(const std::vector<ImFont*>& fonts) override;
 
   private:
     std::unique_ptr<ButtonClickedEvent> m_startFlightEvent;

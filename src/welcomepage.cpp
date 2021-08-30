@@ -2,9 +2,7 @@
 
 #include <imgui.h>
 
-#include "ui/button.h"
 #include "ui/buttonclickedevent.h"
-#include "ui/label.h"
 #include <log.h>
 
 WelcomePage::WelcomePage()
@@ -18,12 +16,12 @@ WelcomePage::~WelcomePage()
     Log() << "delete welcome page" << Log::endl;
 }
 
-ButtonClickedEvent *WelcomePage::flightStartedEvent() const
+ButtonClickedEvent* WelcomePage::flightStartedEvent() const
 {
     return m_startFlightEvent.get();
 }
 
-void WelcomePage::buildContent(const std::vector<ImFont *> &fonts)
+void WelcomePage::buildContent(const std::vector<ImFont*>& fonts)
 {
     auto windowWidth = ImGui::GetWindowWidth();
     auto textWidth = ImGui::CalcTextSize("Welcome Captain!").x;

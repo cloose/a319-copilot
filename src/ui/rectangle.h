@@ -1,7 +1,7 @@
 #ifndef _UI_RECTANGLE_H_
 #define _UI_RECTANGLE_H_
 
-typedef void *XPLMWindowID;
+typedef void* XPLMWindowID;
 
 namespace UI
 {

@@ -9,7 +9,7 @@ using UI::Window;
 
 #include <log.h>
 
-Window::Window(const std::string &title, Rectangle geometry)
+Window::Window(const std::string& title, Rectangle geometry)
     : m_title(title)
     , m_context(nullptr)
     , m_fonts({})
@@ -19,7 +19,7 @@ Window::Window(const std::string &title, Rectangle geometry)
     IMGUI_CHECKVERSION();
     m_context = ImGui::CreateContext();
 
-    auto &io = ImGui::GetIO();
+    auto& io = ImGui::GetIO();
     io.KeyMap[ImGuiKey_Tab] = XPLM_VK_TAB;
     io.KeyMap[ImGuiKey_LeftArrow] = XPLM_VK_LEFT;
     io.KeyMap[ImGuiKey_RightArrow] = XPLM_VK_RIGHT;
@@ -29,21 +29,8 @@ Window::Window(const std::string &title, Rectangle geometry)
     io.KeyMap[ImGuiKey_Space] = XPLM_VK_SPACE;
     io.KeyMap[ImGuiKey_Enter] = XPLM_VK_RETURN;
 
-    auto &style = ImGui::GetStyle();
-
-    Log() << style.FramePadding.x << ", " << style.FramePadding.y << Log::endl;
-    Log() << style.ItemSpacing.x << ", " << style.ItemSpacing.y << Log::endl;
-    Log() << style.ItemInnerSpacing.x << ", " << style.ItemInnerSpacing.y << Log::endl;
-
+    auto& style = ImGui::GetStyle();
     style.WindowRounding = 0;
-    //style.FramePadding = ImVec2(30, 30);
-    //style.ItemSpacing = ImVec2(30, 30);
-    //style.ItemInnerSpacing = ImVec2(30, 30);
-    //style.ScaleAllSizes(2.0f);
-
-    Log() << style.FramePadding.x << ", " << style.FramePadding.y << Log::endl;
-    Log() << style.ItemSpacing.x << ", " << style.ItemSpacing.y << Log::endl;
-    Log() << style.ItemInnerSpacing.x << ", " << style.ItemInnerSpacing.y << Log::endl;
 
     io.ConfigWindowsResizeFromEdges = false;
     io.ConfigWindowsMoveFromTitleBarOnly = true;
@@ -59,27 +46,27 @@ Window::~Window()
     XPLMDestroyWindow(m_window);
 }
 
-std::vector<ImFont *> Window::fonts() const
+std::vector<ImFont*> Window::fonts() const
 {
     return m_fonts;
 }
 
-void Window::loadFonts(ImGuiIO &io)
+void Window::loadFonts(ImGuiIO& io)
 {
 
-    ImFont *defaultFont = io.Fonts->AddFontFromFileTTF("./Resources/fonts/DejaVuSans.ttf", 17.0);
+    ImFont* defaultFont = io.Fonts->AddFontFromFileTTF("./Resources/fonts/DejaVuSans.ttf", 17.0);
     if (!defaultFont) {
         Log() << "Failed to load default font from file" << Log::endl;
     }
     m_fonts.push_back(defaultFont);
 
-    ImFont *monoFont = io.Fonts->AddFontFromFileTTF("./Resources/fonts/DejaVuSansMono.ttf", 15.0);
+    ImFont* monoFont = io.Fonts->AddFontFromFileTTF("./Resources/fonts/DejaVuSansMono.ttf", 15.0);
     if (!monoFont) {
         Log() << "Failed to load mono font from file" << Log::endl;
     }
     m_fonts.push_back(monoFont);
 
-    unsigned char *pixels;
+    unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
 
@@ -104,16 +91,16 @@ void Window::loadFonts(ImGuiIO &io)
 
 void Window::createWindow(Rectangle geometry)
 {
-    auto drawWindowHandler = [](XPLMWindowID window, void *refcon) {
-        reinterpret_cast<Window *>(refcon)->onDrawWindow();
+    auto drawWindowHandler = [](XPLMWindowID window, void* refcon) {
+        reinterpret_cast<Window*>(refcon)->onDrawWindow();
     };
 
-    auto mouseClickHandler = [](XPLMWindowID window, int x, int y, XPLMMouseStatus status, void *refcon) -> int {
-        return reinterpret_cast<Window *>(refcon)->onMouseClicked(x, y, status);
+    auto mouseClickHandler = [](XPLMWindowID window, int x, int y, XPLMMouseStatus status, void* refcon) -> int {
+        return reinterpret_cast<Window*>(refcon)->onMouseClicked(x, y, status);
     };
 
-    auto cursorHandler = [](XPLMWindowID window, int x, int y, void *refcon) -> XPLMCursorStatus {
-        return reinterpret_cast<Window *>(refcon)->onCursorMoved(x, y);
+    auto cursorHandler = [](XPLMWindowID window, int x, int y, void* refcon) -> XPLMCursorStatus {
+        return reinterpret_cast<Window*>(refcon)->onCursorMoved(x, y);
     };
 
     XPLMCreateWindow_t params = {};
@@ -138,7 +125,7 @@ void Window::createWindow(Rectangle geometry)
     Log() << "X-Plane Window Created" << Log::endl;
 }
 
-void Window::updateMousePosition(ImGuiIO &io, int x, int y)
+void Window::updateMousePosition(ImGuiIO& io, int x, int y)
 {
     Rectangle geometry = Rectangle::fromWindow(m_window);
     float mousePosX = static_cast<float>(x - geometry.left);
@@ -183,16 +170,16 @@ void Window::initGraphicsState(Rectangle geometry)
     glTranslatef(geometry.left, -geometry.top, 0.0f);
 }
 
-void Window::renderUI(ImDrawData *drawData)
+void Window::renderUI(ImDrawData* drawData)
 {
     for (int i = 0; i < drawData->CmdListsCount; i++) {
-        ImDrawList *commandList = drawData->CmdLists[i];
-        ImDrawVert *vertexBuffer = commandList->VtxBuffer.Data;
-        ImDrawIdx *indexBuffer = commandList->IdxBuffer.Data;
+        ImDrawList* commandList = drawData->CmdLists[i];
+        ImDrawVert* vertexBuffer = commandList->VtxBuffer.Data;
+        ImDrawIdx* indexBuffer = commandList->IdxBuffer.Data;
 
-        glVertexPointer(2, GL_FLOAT, sizeof(ImDrawVert), (const GLvoid *)((const char *)vertexBuffer + IM_OFFSETOF(ImDrawVert, pos)));
-        glTexCoordPointer(2, GL_FLOAT, sizeof(ImDrawVert), (const GLvoid *)((const char *)vertexBuffer + IM_OFFSETOF(ImDrawVert, uv)));
-        glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(ImDrawVert), (const GLvoid *)((const char *)vertexBuffer + IM_OFFSETOF(ImDrawVert, col)));
+        glVertexPointer(2, GL_FLOAT, sizeof(ImDrawVert), (const GLvoid*)((const char*)vertexBuffer + IM_OFFSETOF(ImDrawVert, pos)));
+        glTexCoordPointer(2, GL_FLOAT, sizeof(ImDrawVert), (const GLvoid*)((const char*)vertexBuffer + IM_OFFSETOF(ImDrawVert, uv)));
+        glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(ImDrawVert), (const GLvoid*)((const char*)vertexBuffer + IM_OFFSETOF(ImDrawVert, col)));
 
         for (auto command : commandList->CmdBuffer) {
             if (command.UserCallback) {
@@ -228,7 +215,7 @@ void Window::onDrawWindow()
         ImGui::SetCurrentContext(m_context);
 
         float time = XPLMGetElapsedTime();
-        ImGuiIO &io = ImGui::GetIO();
+        ImGuiIO& io = ImGui::GetIO();
         io.DeltaTime = time - m_lastTimeDraw;
         m_lastTimeDraw = time;
 
@@ -250,7 +237,7 @@ void Window::onDrawWindow()
         initGraphicsState(windowGeometry);
         renderUI(ImGui::GetDrawData());
         restoreGraphicsState();
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         XPLMDebugString(e.what());
         XPLMDebugString("\n");
         Log() << e.what() << Log::endl;
@@ -260,7 +247,7 @@ void Window::onDrawWindow()
 int Window::onMouseClicked(int x, int y, XPLMMouseStatus status)
 {
     ImGui::SetCurrentContext(m_context);
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
 
     updateMousePosition(io, x, y);
 
@@ -278,7 +265,7 @@ int Window::onMouseClicked(int x, int y, XPLMMouseStatus status)
 XPLMCursorStatus Window::onCursorMoved(int x, int y)
 {
     ImGui::SetCurrentContext(m_context);
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
 
     updateMousePosition(io, x, y);
 

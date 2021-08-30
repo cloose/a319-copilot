@@ -15,12 +15,12 @@ class FlowPage : public Page
     explicit FlowPage();
     virtual ~FlowPage();
 
-    ButtonClickedEvent *nextFlowEvent() const;
+    ButtonClickedEvent* nextFlowEvent() const;
 
-    void setTitle(const std::string &title);
-    void setFlowSteps(const std::vector<FlowStep> &flowSteps);
+    void setTitle(const std::string& title);
+    void setFlowSteps(const std::vector<FlowStep>& flowSteps);
 
-    void buildContent(const std::vector<ImFont *> &fonts) override;
+    void buildContent(const std::vector<ImFont*>& fonts) override;
 
   private:
     std::string m_title;

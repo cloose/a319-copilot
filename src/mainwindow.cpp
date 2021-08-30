@@ -5,7 +5,7 @@
 #include "page.h"
 #include <log.h>
 
-MainWindow::MainWindow(const std::string &title, UI::Rectangle geometry)
+MainWindow::MainWindow(const std::string& title, UI::Rectangle geometry)
     : UI::Window(title, geometry)
     , m_page(nullptr)
 {

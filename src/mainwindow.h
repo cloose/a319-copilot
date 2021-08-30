@@ -9,7 +9,7 @@ class Page;
 class MainWindow : public UI::Window
 {
   public:
-    MainWindow(const std::string &title, UI::Rectangle geometry);
+    MainWindow(const std::string& title, UI::Rectangle geometry);
     virtual ~MainWindow();
 
     void showPage(std::shared_ptr<Page> page);

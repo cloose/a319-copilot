@@ -3,10 +3,7 @@
 #include <imgui.h>
 
 #include "flows/flow.h"
-#include "ui/button.h"
 #include "ui/buttonclickedevent.h"
-#include "ui/label.h"
-#include "ui/textarea.h"
 #include <log.h>
 
 FlowPage::FlowPage()
@@ -21,17 +18,17 @@ FlowPage::~FlowPage()
     Log() << "delete flow page" << Log::endl;
 }
 
-ButtonClickedEvent *FlowPage::nextFlowEvent() const
+ButtonClickedEvent* FlowPage::nextFlowEvent() const
 {
     return m_nextFlowEvent.get();
 }
 
-void FlowPage::setTitle(const std::string &title)
+void FlowPage::setTitle(const std::string& title)
 {
     m_title = title;
 }
 
-void FlowPage::setFlowSteps(const std::vector<FlowStep> &flowSteps)
+void FlowPage::setFlowSteps(const std::vector<FlowStep>& flowSteps)
 {
     m_flowSteps = flowSteps;
 }
@@ -43,19 +40,21 @@ void FlowPage::buildContent(const std::vector<ImFont*>& fonts)
 
     ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5);
     ImGui::TextUnformatted(m_title.c_str());
+    ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
     ImGui::PushFont(fonts[1]);
-    for (auto &&step : m_flowSteps) {
+    for (auto&& step : m_flowSteps) {
         ImGui::Text(step.description.c_str());
 
         ImGui::SameLine();
 
         Color c = step.condition();
-        ImVec4 color {c.values[0], c.values[1], c.values[2], 1.0f};
+        ImVec4 color{c.values[0], c.values[1], c.values[2], 1.0f};
         ImGui::TextColored(color, step.state.c_str());
     }
     ImGui::PopFont();
 
+    ImGui::Dummy(ImVec2(0.0f, 10.0f));
     if (ImGui::Button("Next Flow")) {
         Log() << "Next Flow Button CLICKED" << Log::endl;
         m_nextFlowEvent->emit();

@@ -107,13 +107,13 @@ float Copilot::update(float elapsedSinceLastCall, float elapsedTimeSinceLastFlig
     Log() << "[COPILOT] flight loop callback" << Log::endl;
     try {
         return m_flow->update();
-    } catch (std::runtime_error &ex) {
+    } catch (std::runtime_error& ex) {
         Log() << "exception during flow update: " << ex.what() << Log::endl;
         return 0.0f;
     }
 }
 
-FlightStateChangedEvent *Copilot::flightStateChangedEvent() const
+FlightStateChangedEvent* Copilot::flightStateChangedEvent() const
 {
     return m_flightStateChangedEvent.get();
 }

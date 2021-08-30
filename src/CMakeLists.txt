@@ -27,10 +27,7 @@ set(SOURCES
     flows/cockpitpreparationflow.cpp
     flows/takeoffflow.cpp
     flows/taxiflow.cpp
-    ui/button.cpp
-    ui/label.cpp
     ui/rectangle.cpp
-    ui/textarea.cpp
     ui/window.cpp
     copilot.cpp
     flowpage.cpp
@@ -59,12 +56,9 @@ set(HEADERS
     flows/taxiflow.h
     flows/flow.h
     flows/flowstep.h
-    ui/button.h
     ui/buttonclickedevent.h
     ui/color.h
-    ui/label.h
     ui/rectangle.h
-    ui/textarea.h
     ui/window.h
     copilot.h
     flightstate.h
