@@ -1,5 +1,5 @@
-#ifndef _NEW_MAINWINDOW_H_
-#define _NEW_MAINWINDOW_H_
+#ifndef _MAINWINDOW_H_
+#define _MAINWINDOW_H_
 
 #include "ui/window.h"
 #include <memory>
@@ -21,4 +21,4 @@ class MainWindow : public UI::Window
     std::shared_ptr<Page> m_page;
 };
 
-#endif // _NEW_MAINWINDOW_H_
+#endif // _MAINWINDOW_H_
